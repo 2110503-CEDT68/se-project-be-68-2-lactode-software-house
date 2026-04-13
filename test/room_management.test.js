@@ -215,7 +215,7 @@ describe('Room API (Integration)', () => {
       .send({ price: 2000 });
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.data).toHaveProperty('price',200);
+    expect(res.body.data).toHaveProperty('price',2000);
   });
 
   test('UPDATE room (user fail)', async () => {

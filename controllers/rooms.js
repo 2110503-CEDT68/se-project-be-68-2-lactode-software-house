@@ -3,11 +3,11 @@ const Hotel = require('../models/Hotel');
 
 
 // @desc    view all rooms
-// @route   GET api/v1/hotels/:id/rooms
+// @route   GET api/v1/hotels/:hotelID/rooms
 // @access  Public
 exports.getManyRooms = async (req,res)=>{
     try{
-        const rooms = await Room.find({hotelID: req.params.id})
+        const rooms = await Room.find({hotelID: req.params.hotelID})
         res.status(200).json({
             success:true,
             count:rooms.length,
@@ -23,11 +23,11 @@ exports.getManyRooms = async (req,res)=>{
 }
 
 // @desc    view single rooms
-// @route   GET api/v1/hotels/:id/rooms/:id
+// @route   GET api/v1/hotels/:hotelID/rooms/:id
 // @access  Public
 exports.getSingleRoom = async (req, res) => {
     try {
-        const room = await Room.findById(req.params.id).populate('hotelID', 'name location');
+        const room = await Room.findById(req.params.roomID).populate('hotelID', 'name location');
 
         if (!room) {
             return res.status(404).json({ success: false, message: 'Room not found' });
@@ -45,7 +45,7 @@ exports.getSingleRoom = async (req, res) => {
 };
 
 // @desc    create room
-// @route   POST api/v1/hotels/:id/rooms
+// @route   POST api/v1/hotels/:hotelID/rooms/:roomId
 // @access  hotel
 exports.createRoom = async (req, res) => {
     try {
@@ -77,18 +77,18 @@ exports.createRoom = async (req, res) => {
 
 
 // @desc    update rooms
-// @route   PUT api/v1/hotels/:id/rooms/:id
+// @route   PUT api/v1/hotels/:hotelID/rooms/:id
 // @access  hotel
 exports.updateRoom = async (req, res) => {
     try {
-        let room = await Room.findById(req.params.id);
+        let room = await Room.findById(req.params.roomID);
 
         if (!room) {
             return res.status(404).json({ success: false, message: 'Room not found' });
         }
 
         // Make sure the room belongs to the hotel in the URL
-        if (room.hotelID.toString() !== req.params.hotelID) {
+        if (room.hotelID.toString() !== req.params.hotelID){
             return res.status(400).json({ success: false, message: 'Room does not belong to this hotel' });
         }
 
@@ -104,7 +104,7 @@ exports.updateRoom = async (req, res) => {
         delete req.body.hotelID;
 
         room = await Room.findByIdAndUpdate(
-            req.params.id,
+            req.params.roomID,
             req.body,
             {
                 new: true,
@@ -124,12 +124,12 @@ exports.updateRoom = async (req, res) => {
 
 
 // @desc    delete rooms
-// @route   DELETE api/v1/hotels/:id/rooms/:id
+// @route   DELETE api/v1/hotels/:hotelID/rooms/:roomID
 // @access  hotel
 
 exports.deleteRoom = async (req, res) => {
     try {
-        const room = await Room.findById(req.params.id);
+        const room = await Room.findById(req.params.roomID);
         if (!room) {
             return res.status(404).json({ success: false, message: 'Room not found' });
         }
