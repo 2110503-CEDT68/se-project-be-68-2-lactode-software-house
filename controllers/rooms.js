@@ -5,6 +5,22 @@ const Hotel = require('../models/Hotel');
 // @desc    view all rooms
 // @route   GET api/v1/hotels/:id/rooms
 // @access  Public
+exports.getManyRooms = async (req,res)=>{
+    try{
+        const rooms = await Room.find({hotelID: req.params.id})
+        res.status(200).json({
+            success:true,
+            count:rooms.length,
+            data: rooms
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            success: false,
+            msg: `Cannot get rooms: ${err.message}`
+        });
+    }
+}
 
 // @desc    view single rooms
 // @route   GET api/v1/hotels/:id/rooms/:id
